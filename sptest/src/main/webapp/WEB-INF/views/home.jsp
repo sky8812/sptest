@@ -8,7 +8,7 @@
 </head>
 <body>
 <h1>
-	Hello world!  으아ㅏㅇㅇ아아앙아아 by 한새미
+	Hello world!  가나다라마바사ㅏ by팀장(홍길동) 
 </h1>
 
 <P>  The time on the server is ${serverTime}. </P>
