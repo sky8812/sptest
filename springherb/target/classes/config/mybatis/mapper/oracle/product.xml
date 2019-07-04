@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="config.mybatis.mapper.oracle.product">
+	<select id="selectEventPd" parameterType="string" resultType="productVo">
+		select * from productEventView where eventname=#{eventName}
+	</select>
+
+	<select id="selectProductByNo" parameterType="int" resultType="productVo">
+		select * from products where productno=#{productNo}
+	</select>
+	
+	<select id="selectByCategoryNo" parameterType="int" resultType="productVo">
+		select * from Products where categoryNo=#{categoryNo}
+	</select>
+	
+	<insert id="insertProduct" parameterType="productVo">
+		<selectKey keyProperty="productNo" order="BEFORE" resultType="int">
+			select PRODUCTS_SEQ.nextval from dual
+		</selectKey>
+		insert into products(productno, categoryno, productname, sellprice, company, imageurl, explains, description, mileage)
+		values(#{productNo}, #{categoryNo}, #{productName}, #{sellPrice}, #{company}, #{imageURL}, #{explains}, #{description}, #{mileage})
+	</insert>
+	
+	<select id="selectProductAll" parameterType="eventProductVo" resultType="productVo">
+	select * 
+		from
+		(
+	   		select A.*, rownum as RNUM 
+	    	from 
+	   	 (
+	   	 	<if test="eventName==null or eventName==''">
+	   	 	select * from products
+	   	 	</if>
+	   	 	<if test="eventName!=null and eventName!=''">
+	       select * from producteventview
+			where eventname=#{eventName}
+	   	 	</if>
+			order by productno desc
+	    ) A
+	)
+<![CDATA[where RNUM>#{firstRecordIndex} and RNUM<= #{firstRecordIndex} + #{recordCountPerPage}]]>
+	</select>
+	
+	<select id="getTotalRecord" parameterType="eventProductVo" resultType="int">
+	<if test="eventName==null or eventName==''">
+	   	 	select count(*) from products order by productno desc
+	   	 	</if>
+	   	 	<if test="eventName!=null and eventName!=''">
+	       select count(*) from producteventview
+			where eventname=#{eventName}
+	   	 	</if>
+	</select>
+	
+	<delete id="deleteProduct2" parameterType="map">
+		delete from products 
+		where productNo in 
+		<foreach collection="pdNos" item="pdNo" open="(" close=")" separator=",">
+			#{pdNo}
+		</foreach>
+	</delete>
+	
+	<delete id="deleteProduct" parameterType="int">
+		delete from products where productNo=#{productNo}
+	</delete>
+	
+	<select id="geteventProductCount" parameterType="eventProductVo" resultType="int">
+		select count(*) from eventProduct 
+		where productNo=#{productNo} and eventName=#{eventName}
+	</select>
+	
+	<insert id="inserteventProduct" parameterType="eventProductVo">
+		<selectKey keyProperty="eventProductNo" order="BEFORE" resultType="int">
+			select EVENTPRODUCT_SEQ.nextval from dual
+		</selectKey>
+		insert into eventProduct
+		values(#{eventProductNo},#{productNo},#{eventName})
+	</insert>
+	
+</mapper>
+

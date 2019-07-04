@@ -1,0 +1,11 @@
+회원가입 수정할 때 로그인 체크 메서드 먼저 처리 후 update실행
+confirm
+rownum
+
+select no, title
+from
+(
+	select * from board order by no desc -- 원래 select문
+)
+where rownum<=5;
+

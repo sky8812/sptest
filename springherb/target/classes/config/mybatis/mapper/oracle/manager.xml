@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="config.mybatis.mapper.oracle.manager">
+	<select id="selectPwdForAdminLogin" parameterType="string" resultType="string">
+		select pwd from managers where userid=#{userid}
+	</select>
+	
+	<select id="selectManager" parameterType="string" resultType="managerVo">
+		select * from managers where userid=#{userid}
+	</select>
+	
+	<select id="selectAuthorityAll" resultType="map">
+		select * from authority order by authlevel
+	</select>
+	
+	<insert id="insertManager" parameterType="managerVo">
+		<selectKey keyProperty="no" order="BEFORE" resultType="int">
+			select managers_seq.nextval from dual
+		</selectKey>
+		insert into managers(no, userid, name, pwd, authcode)
+		values(#{no},#{userid},#{name},#{pwd},#{authCode})
+	</insert>
+</mapper>
+

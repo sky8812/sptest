@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="config.mybatis.mapper.oracle.board">
+	<insert id="insertBoard" parameterType="boardVo">
+		<selectKey keyProperty="no" resultType="int" order="BEFORE">
+			select board_seq.nextval from dual
+		</selectKey>
+		insert into board(no, name, pwd, title, email, content)
+					values(#{no}, #{name}, #{pwd}, #{title}, #{email}, #{content})
+	</insert>
+	<select id="selectSearch" parameterType="searchVo" resultType="boardVo">
+		<!-- select * from board 
+			<if test="searchKeyword !=null and searchKeyword !=''">
+			where ${searchCondition} like '%' || #{searchKeyword} || '%'
+		</if>
+		order by no desc -->
+		
+		select * 
+		from
+		(
+	   		select A.*, rownum as RNUM 
+	    	from 
+	   	 (
+	        select no, name, pwd, title, email, regdate, readcount, content, (sysdate-regdate)*24 as new_Img_Term from board 
+	        <if test="searchKeyword !=null and searchKeyword !=''">
+				where ${searchCondition} like '%' || #{searchKeyword} || '%'
+			</if>
+	        order by no desc
+	    ) A
+	)
+<![CDATA[where RNUM>#{firstRecordIndex} and RNUM<= #{firstRecordIndex} + #{recordCountPerPage}]]>
+	</select>
+	
+	<select id="selectTotalCount" parameterType="searchVo" resultType="int">
+		select count(*) from board 
+	        <if test="searchKeyword !=null and searchKeyword !=''">
+				where ${searchCondition} like '%' || #{searchKeyword} || '%'
+			</if>
+	</select>
+	
+	<update id="updateReadCount" parameterType="int">
+		update board 
+		set readcount=readcount+1 
+		where no=#{no}
+	</update>
+	
+	<select id="selectByNo" parameterType="int" resultType="boardVo">
+		select * from board where no=#{no}
+	</select>
+	
+	<select id="selectPwd" parameterType="int" resultType="String">
+		select pwd from board where no=#{no}
+	</select>
+	
+	<select id="selectPWdCheck" parameterType="boardVo" resultType="int">
+		select count(*) from board
+		where no=#{no} and pwd=#{pwd}
+	</select>
+	
+	<update id="updateBoard" parameterType="boardVo">
+		update board
+		set name=#{name}, title=#{title}, email=#{email}, content=#{content} 
+		where no=#{no} 
+	</update>
+	
+	<delete id="deleteBoard" parameterType="int">
+	delete from board
+	where no=#{no}
+	</delete>
+	
+	<select id="selectMainNotice" resultType="boardVo">
+	select no, title from 
+	(
+	 select * from board 
+	 order by no desc 
+	 )
+	<![CDATA[ where rownum<=6 ]]>
+</select>
+	
+</mapper>
+
+
+
+
+
+
+
+
+
