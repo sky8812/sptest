@@ -92,4 +92,21 @@ on p.productno=c.productno;
 select * from cartview
 where customerid='sp2';
 
+create or replace view orderDetailsView
+as
+select o.*, p.productname, p.imageurl, p.sellprice
+from orderdetails o join products p
+on o.productno=p.productno;
+--where orderno=2;
+
+select * from orderDetailsView;
+
+create or replace view ordersView
+as
+select o.*, m.name
+from orders o join member2 m
+on o.customerid=m.userid;
+
+select * from ordersView;
+
 

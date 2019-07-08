@@ -156,7 +156,7 @@
 		</c:if>
 		<c:if test="${!empty cartList }">
 		<c:set var="buyPrice" value="0"/> <!-- 총 구매금액 -->
-		<c:set var="delivery" value="0"/> <!-- 배송비 -->
+		<c:set var="delivery" value="3000"/> <!-- 배송비 -->
 		<c:set var="totalPrice" value="0"/> <!-- 총 주문합계 -->
 		
 			<!--반복 시작 -->

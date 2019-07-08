@@ -3,6 +3,24 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="config.mybatis.mapper.oracle.order">
+	<resultMap type="orderAllVo" id="orderListResultMap">
+		<association property="orderVo" column="orderNo" javaType="OrderVO"> <!--  property 멤버변수이름과 같게 -->
+			<id column="orderNo" property="orderNo" jdbcType="BIGINT"/>
+			<result column="customerId" property="customerId" jdbcType="VARCHAR"/>
+			<result column="totalPrice" property="totalPrice" jdbcType="BIGINT"/>
+			<result column="deliveryStatus" property="deliveryStatus" jdbcType="VARCHAR"/>
+			<result column="orderDate" property="orderDate" jdbcType="TIMESTAMP"/>
+			<result column="paymentEndDate" property="paymentEndDate" jdbcType="TIMESTAMP"/>
+			<result column="message" property="message" jdbcType="VARCHAR"/>
+			<result column="customername" property="customerName" jdbcType="VARCHAR"/>
+			<result column="hp" property="hp" jdbcType="VARCHAR"/>
+			<result column="zipcode" property="zipcode" jdbcType="VARCHAR"/>
+			<result column="address" property="address" jdbcType="VARCHAR"/>
+			<result column="addressDetail" property="addressDetail" jdbcType="VARCHAR"/>
+			<result column="deliverydate" property="deliveryDate" jdbcType="TIMESTAMP"/>
+		</association>
+	</resultMap>
+	
 	<insert id="insertOrder" parameterType="orderVo">
 		<selectKey keyProperty="orderNo" order="BEFORE" resultType="int">
 			select orders_seq.nextval from dual
@@ -19,5 +37,43 @@
 	<delete id="deleteCartByUserid" parameterType="string">
 		delete from cart where customerid=#{customerId}
 	</delete> <!-- userid라고 써도 가능 (하나일때) -->
+	
+	<select id="selectOrderDetailsView" resultType="map" parameterType="int">
+		select * from orderDetailsView where orderno=#{orderNo}
+	</select>
+	<select id="selectOrdersView" resultType="map" parameterType="int">
+		select * from ordersView where orderno=#{orderNo}
+	</select>
+	
+	<select id="selectOrderList" parameterType="dateSearchVo" resultMap="orderListResultMap">
+	select * 
+		from
+		(
+	   		select A.*, rownum as RNUM 
+	    	from 
+	   	 (
+	        select * from orders 
+			<where>
+			<if test="customerId!=null and customerId!=''">
+				customerid=#{customerId}
+			</if>
+			and orderdate>=#{startDay} 
+			<![CDATA[and orderdate<to_date(#{endDay})+1 ]]>
+			</where>
+	    ) A
+	)
+	<![CDATA[where RNUM>#{firstRecordIndex} and RNUM<= #{firstRecordIndex} + #{recordCountPerPage}]]>
+	</select>
+	
+	<select id="selectTotalRecord" parameterType="dateSearchVo" resultType="int">
+		 select count(*) from orders 
+			<where>
+			<if test="customerId!=null and customerId!=''">
+				customerid=#{customerId}
+			</if>
+			and orderdate>=#{startDay} 
+			<![CDATA[and orderdate<to_date(#{endDay})+1 ]]>
+			</where>
+	</select>
 </mapper>
 

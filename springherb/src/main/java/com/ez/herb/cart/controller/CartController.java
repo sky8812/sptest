@@ -37,7 +37,7 @@ public class CartController {
 		if(mode.equals("cart")) {
 			resultPage="/shop/cart/cartList.do";
 		}else {
-			resultPage="/shop/cart/orderSheet.do";
+			resultPage="/shop/order/orderSheet.do";
 		}
 		
 		return "redirect:"+resultPage;

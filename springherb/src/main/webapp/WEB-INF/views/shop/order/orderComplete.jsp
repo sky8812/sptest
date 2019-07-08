@@ -1,5 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=utf-8"
-    pageEncoding="utf-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <%@ include file="../../inc/top.jsp" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>  
 <style type="text/css">
@@ -35,17 +35,23 @@
 		margin:10px 0;	
 		border: none;
 	}
-	
+	.divForm p	{
+		clear: both;
+		border-bottom: 1px solid #eee;
+		padding: 5px 0;
+		margin: 0;
+		overflow: auto;
+		}
 </style>
 
 <h2>주문 완료</h2>
 <p style="font-size:13pt;font-weight:bold">
 	주문과 결제가 정상적으로 완료되었습니다
-	[주문번호 : ]
+	[주문번호 : ${param.orderNo }]
 </p>
 <br><br>
 <p class="titleP">
-	<img src='<c:url value="/images/dot7.JPG"/>' align="absmiddle" />
+	<img src='<c:url value="/resources/images/dot7.JPG"/>' align="absmiddle" />
 	<span style="font-size:12pt;font-weight:bold">주문하신 상품</span>
 </p>
 
@@ -70,7 +76,26 @@ summary="주문 상품 목록에 관한 표로써, 상품명,가격, 수량, 금
 	<tbody>
 	<!-- 데이터가 있는 경우 -->
 	<!-- 반복문 시작 -->				
-	
+	 <c:if test="${empty list }">
+		<tr>
+			<td colspan="4">해당 상품이 없습니다.</td>
+		</tr>
+	</c:if>
+	<c:if test="${!empty list }">
+	<c:forEach items="${list }" var="map">
+	<c:set var="sum" value="${map['SELLPRICE']*map['QUANTITY'] }"/>
+		<tr>
+			<td class="align_left">
+			${map['PRODUCTNAME'] }
+			<img src="<c:url value='/pd_images/${map["IMAGEURL"] }'/>"  align="absmiddle" 
+			width=40>
+			</td>
+			<td><fmt:formatNumber pattern="#,###" value="${map['SELLPRICE'] }"/>원</td>
+			<td>${map['QUANTITY'] }개</td>
+			<td>${sum }원</td>
+		</tr>
+		</c:forEach>
+	</c:if> 
 
 	<!-- 반복문 끝 -->
 	</tbody>
@@ -80,35 +105,35 @@ summary="주문 상품 목록에 관한 표로써, 상품명,가격, 수량, 금
  
 <div class="divForm">   
   	<p class="titleP">
-		<img src='<c:url value="/images/dot7.JPG"/>' align="absmiddle" />
+		<img src='<c:url value="/resources/images/dot7.JPG"/>' align="absmiddle" />
     	<span class="title">배송 정보</span>
 	</p>
 	<p>
         <span class="sp1">보내시는 분 </span>
-        <span></span>        
+        <span>${map['NAME'] }</span>        
     </p>
     <p>
         <span class="sp1">받으시는 분 </span>
-        <span></span>
+        <span>${map['CUSTOMERNAME'] }</span>
     </p>
     
     <p>
         <span class="sp1">배송지 주소</span>
-        <span></span>
+        <span>${map['ADDRESS'] }</span>
     </p>
     <p>
         <span class="sp1">휴대폰 번호</span>
-        <span></span>
+        <span>${map['HP'] }</span>
     </p>        
    
 	<br>
 	<p class="titleP">
-		<img src='<c:url value="/images/dot7.JPG"/>' align="absmiddle" />
+		<img src='<c:url value="/resources/images/dot7.JPG"/>' align="absmiddle" />
 		<span class="title">결제 정보</span>
 	</p>	
     <p>
         <span class="sp1">결제금액</span>
-        <span>원     </span>
+        <span><fmt:formatNumber pattern="#,###" value="${map['TOTALPRICE'] }"/> 원     </span>
     </p>
 </div>
 
