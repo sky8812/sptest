@@ -4,6 +4,13 @@
 <%@ include file="../../inc/top.jsp" %>
 
 
+<style type="text/css">
+.orderInfo{
+	margin-bottom: 10px;
+	margin-top:20px;
+	font-size:1.0em;
+}
+</style>
 <script type="text/javascript">
 	function pageFunc(curPage){
 	
@@ -20,22 +27,20 @@
 </form>
 <!-- 페이징 처리 form 끝 -->
 
-<h2>주문 내역/ 배송현황</h2><br>
-
+<h2>주문 내역/ 배송현황</h2>
+<p class="orderInfo">
+${sessionScope.userName }님의 주문내역입니다. </p>
 <form name="frm1" method="post" 
 	action="<c:url value='/shop/order/orderList.do'/>" >
 	<!-- 조회기간 include -->
-	조회기간
-	<input type="button" value="1주일" >
-	<input type="button" value="1개월" >
-	<input type="button" value="3개월" >
-		
-	<input type="text" name="startDay" id="startDay" value="${dateSearchVO.startDay }"> 
-	~ 
-	<input type="text" name="endDay" id="endDay" value="${dateSearchVO.endDay }">
+	<c:import url="../../inc/dateTerm.jsp"></c:import>
 	<input type="submit" value="조회" >
 </form>
 <br>
+
+<c:if test="${!empty list }">
+${param.startDay } ~ ${param.endDay }까지의 주문내역 총 (${pagingInfo.totalRecord }) 건입니다.
+</c:if>
 
 <div class="divList">
 <table class="box2"
@@ -71,7 +76,16 @@
 		<tr>
 			<td>${orderAllVo.orderVo.orderNo }</td>
 			<td><fmt:formatDate value="${orderAllVo.orderVo.orderDate }" pattern="yyyy-MM-dd"/> </td>
-			<td></td>
+			<td>
+			<c:forEach items="${orderAllVo.orderDetailsList }" var="map">
+			<p>
+				<img alt="${map['PRODUCTNAME'] }" src="<c:url value='/pd_images/${map["IMAGEURL"] }'/>" 
+				WIDTH="40">
+				<b><fmt:formatNumber pattern="#,###" value="${map['SELLPRICE'] }"/>원</b>/
+				${map['QUANTITY'] }개
+			</p>
+			</c:forEach>
+			</td>
 			<td>
 			 <fmt:formatNumber value="${orderAllVo.orderVo.totalPrice }" pattern="#,###"/> 원</td>
 			<td>${orderAllVo.orderVo.deliveryStatus }</td>

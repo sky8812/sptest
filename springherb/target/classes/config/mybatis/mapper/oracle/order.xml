@@ -19,6 +19,8 @@
 			<result column="addressDetail" property="addressDetail" jdbcType="VARCHAR"/>
 			<result column="deliverydate" property="deliveryDate" jdbcType="TIMESTAMP"/>
 		</association>
+		<collection property="orderDetailsList" javaType="ArrayList" ofType="map" 
+		column="orderNo" select="selectOrderDetailsView"></collection>
 	</resultMap>
 	
 	<insert id="insertOrder" parameterType="orderVo">
@@ -60,6 +62,7 @@
 			and orderdate>=#{startDay} 
 			<![CDATA[and orderdate<to_date(#{endDay})+1 ]]>
 			</where>
+			order by orderNo desc
 	    ) A
 	)
 	<![CDATA[where RNUM>#{firstRecordIndex} and RNUM<= #{firstRecordIndex} + #{recordCountPerPage}]]>
@@ -74,6 +77,19 @@
 			and orderdate>=#{startDay} 
 			<![CDATA[and orderdate<to_date(#{endDay})+1 ]]>
 			</where>
+	</select>
+	
+	<select id="selectBestProduct" parameterType="int" resultType="map">
+	select * from
+	(
+	    select p.productno, p.productname, count(*) as SUM
+	    from orderDetailsView o join products p
+	    on o.productno=p.productno
+	    where p.categoryno=(select categoryno from products where productno=#{productNo})
+	    group by p.productno, p.productname
+	    order by SUM desc
+	)
+	<![CDATA[where rownum<=5]]>
 	</select>
 </mapper>
 

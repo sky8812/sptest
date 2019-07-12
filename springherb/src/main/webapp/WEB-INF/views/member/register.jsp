@@ -34,6 +34,39 @@
 			}
 		});
 		
+		$('#userid').keyup(function(){
+			if(validate_userid($('#userid').val()) && $('#userid').val().length>=2){
+				//정상일 때
+
+				$.ajax({
+					url:"<c:url value='/member/ajaxDupUserid.do'/>",
+					type:"get",
+					data:"userid="+$('#userid').val(),
+					success:function(res){
+						var str="";
+						if(res){
+							str="사용가능한 아이디";
+							$('#chkId').val('Y');
+						}else{
+							str="이미 등록된 아이디";
+							$('#chkId').val('N');
+						}
+						$('.error').html(str);
+						$('.error').show();
+						
+					},
+					error:function(xhr, status, error){
+						alert(status+":"+error);
+					}
+				});
+				
+			}else{
+				$('.error').html("아이디 규칙에 맞지 않습니다.");
+				$('.error').show();
+				$('#chkId').val('N');
+			}
+		});
+		
 		
 		
 	});
@@ -48,6 +81,11 @@
 	.width_350{
 		width:350px;
 	}	
+	.error{
+		display:none;
+		color:red;
+		font-weight:bold;
+	}
 </style>
 <article>
 <div class="divForm">
@@ -61,8 +99,8 @@
     <div>
         <label for="userid">회원ID</label>
         <input type="text" name="userid" id="userid"
-        		style="ime-mode:inactive">&nbsp;
-        <input type="button" value="중복확인" id="btnChkId" title="새창열림">
+        		style="ime-mode:inactive">
+        <span class="error"></span>
     </div>
     <div>
         <label for="pwd">비밀번호</label>

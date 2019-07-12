@@ -88,7 +88,7 @@ summary="주문 상품 목록에 관한 표로써, 상품명,가격, 수량, 금
 			<td class="align_left">
 			${map['PRODUCTNAME'] }
 			<img src="<c:url value='/pd_images/${map["IMAGEURL"] }'/>"  align="absmiddle" 
-			width=40>
+			width=40 align="absmiddle" >
 			</td>
 			<td><fmt:formatNumber pattern="#,###" value="${map['SELLPRICE'] }"/>원</td>
 			<td>${map['QUANTITY'] }개</td>

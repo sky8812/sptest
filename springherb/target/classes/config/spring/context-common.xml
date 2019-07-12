@@ -9,22 +9,40 @@
 		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.1.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
-	<context:component-scan base-package="com.ez.herb">
-		<context:exclude-filter expression="org.springframework.stereotype.Controller"
-			type="annotation" />		
+	<context:component-scan
+		base-package="com.ez.herb">
+		<context:exclude-filter
+			expression="org.springframework.stereotype.Controller"
+			type="annotation" />
 	</context:component-scan>
 
-    <!-- MULTIPART RESOLVERS -->
-    <!-- regular spring resolver -->
-    <bean id="spring.RegularCommonsMultipartResolver" 
-    	class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-        <property name="maxUploadSize" value="2000000" />
-        <property name="maxInMemorySize" value="2000000" />
-    </bean>
+	<!-- MULTIPART RESOLVERS -->
+	<!-- regular spring resolver -->
+	<bean id="spring.RegularCommonsMultipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="maxUploadSize" value="2000000" />
+		<property name="maxInMemorySize" value="2000000" />
+	</bean>
 
-    <alias name="spring.RegularCommonsMultipartResolver" alias="multipartResolver" />
+	<alias name="spring.RegularCommonsMultipartResolver"
+		alias="multipartResolver" />
 
-	<util:properties id="fileUploadProperties" location="classpath:/config/props/fileUpload.properties">
+	<util:properties id="fileUploadProperties"
+		location="classpath:/config/props/fileUpload.properties">
 	</util:properties>
-	
+	<bean id="mailSender"
+		class="org.springframework.mail.javamail.JavaMailSenderImpl">
+		<property name="host" value="smtp.gmail.com" />
+		<property name="port" value="587" />
+		<property name="username" value="8sky812@gmail.com" />
+		<property name="password" value="sky8812!" />
+		<property name="javaMailProperties">
+			<props>
+				<prop key="mail.smtp.starttls.enable">true</prop>
+				<prop key="mail.smtp.auth">true</prop>
+				<prop key="mail.transport.protocol">smtp</prop>
+				<prop key="mail.debug">true</prop>
+			</props>
+		</property>
+	</bean>
 </beans>

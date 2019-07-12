@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="config.mybatis.mapper.oracle.sales">
+	<select id="selectSalesByDay" parameterType="DateSearchVo" resultType="map"> 
+		select sum(totalprice),to_char(orderdate,'yyyy-MM-dd') from orders
+		where to_char(orderdate,'yyyy')=#{year}
+		and to_char(orderdate,'mm')=#{month}
+		group by to_char(orderdate,'yyyy-MM-dd')
+		order by to_char(orderdate,'yyyy-MM-dd')
+	</select>
+	
+	<!-- 페이징처리할거면 DateSearchVo, 안할거면 int나 String -->
+	<select id="selectSalesByMonth" parameterType="string" resultType="map">
+	select sum(totalprice),to_char(orderdate,'MM') from orders
+	where to_char(orderdate,'yyyy')=#{year}
+	group by to_char(orderdate,'MM')
+	order by to_char(orderdate,'yyyy-MM-dd')
+	</select>
+	
+	<select id="selectSalesByTerm" parameterType="DateSearchVo" resultType="map">
+	select sum(totalprice), to_char(orderdate, 'yyyy-MM-dd') from orders
+	where orderdate>=#{startDay}
+	
+	<![CDATA[ and orderdate<to_date(#{endDay})+1 ]]>
+	group by to_char(orderdate,'yyyy-MM-dd')
+	order by to_char(orderdate,'yyyy-MM-dd')
+	</select>
+</mapper>
+

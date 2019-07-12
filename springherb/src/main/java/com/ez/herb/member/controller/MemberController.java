@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ez.herb.member.model.MemberService;
 import com.ez.herb.member.model.MemberVO;
@@ -213,6 +214,23 @@ private MemberService memberService;
 		model.addAttribute("msg",msg);
 		model.addAttribute("url",url);
 		return "common/message";
+	}
+	
+	@RequestMapping("/ajaxDupUserid.do")
+	@ResponseBody
+	public Boolean ajaxDupUserid(@RequestParam String userid) {
+		logger.info("ajax방식-아이디 중복확인 파라미터, userid={}",userid);
+		
+		int cnt=memberService.duplicateUserid(userid);
+		logger.info("ajax-아이디 중복확인 결과 cnt={}",cnt);
+		
+		Boolean bool=false;
+		if(cnt==MemberService.USEFUL_USERID) {
+			bool=true;
+		}else if(cnt==MemberService.NON_USEFUL_USERID) {
+			bool=false;
+		}
+		return bool;
 	}
 	
 	

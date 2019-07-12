@@ -4,22 +4,28 @@
 
 <style type="text/css">	
 	#info, #desc{
-		width:700px;		
+		width:900px;		
 	}	
 	#viewImg{
 		float:left;
 		padding:10px 30px 30px 30px;
-		width:30%;				
+		width:20%;				
 	}
 	#viewPd{
 		float:left;
-		padding:0 10px 30px 20px;		
+		padding:0 10px 30px 20px;	
+		width:45%;	
 	}
 	#desc{
 		clear:both;
 		padding:10px 0 5px 0;		
 	}
-	
+	#viewBest{
+		float:Left;
+		width:20%;
+		padding: 0 10px 0 30px;
+		
+	}
 	.line2{
 		border-bottom:solid silver 2px;
 		padding:0 0 10px 7px;
@@ -122,6 +128,10 @@
 				<input type="button" value="장바구니담기" id="btCart">
 			</p>
 		</form>
+	</div>
+	<!-- 카테고리별 판매가 가장 많은 상품 -->
+	<div id="viewBest">
+		<c:import url="/shop/order/bestProduct.do?productNo=${vo.productNo }"></c:import>
 	</div>
 </div>
 <div id="desc">

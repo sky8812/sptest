@@ -13,4 +13,5 @@ public interface OrderDAO {
 	Map<String, Object> selectOrdersView(int orderNo);
 	List<OrderAllVO> selectOrderList(DateSearchVO dateSearchVo);
 	int selectTotalRecord(DateSearchVO dateSearchVo);
+	List<Map<String, Object>> selectBestProduct(int productNo);
 }
