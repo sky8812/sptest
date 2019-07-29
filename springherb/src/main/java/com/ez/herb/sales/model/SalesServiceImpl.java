@@ -13,8 +13,8 @@ public class SalesServiceImpl implements SalesService{
 	@Autowired private SalesDAO salesDao;
 	
 	@Override
-	public List<Map<String, Object>> selectSalesByDay(DateSearchVO dateSerchVo) {
-		return salesDao.selectSalesByDay(dateSerchVo);
+	public List<Map<String, Object>> selectSalesByDay(DateSearchVO dateSearchVo) {
+		return salesDao.selectSalesByDay(dateSearchVo);
 	}
 
 	@Override
@@ -23,8 +23,8 @@ public class SalesServiceImpl implements SalesService{
 	}
 
 	@Override
-	public List<Map<String, Object>> selectSalesByTerm(DateSearchVO dateSerchVo) {
-		return salesDao.selectSalesByTerm(dateSerchVo);
+	public List<Map<String, Object>> selectSalesByTerm(DateSearchVO dateSearchVo) {
+		return salesDao.selectSalesByTerm(dateSearchVo);
 	}
 
 }

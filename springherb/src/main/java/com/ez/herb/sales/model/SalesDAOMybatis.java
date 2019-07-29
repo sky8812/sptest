@@ -15,16 +15,16 @@ public class SalesDAOMybatis implements SalesDAO{
 	@Autowired private SqlSessionTemplate sqlSession;
 	
 	@Override
-	public List<Map<String, Object>> selectSalesByDay(DateSearchVO dateSerchVo) {
-		return sqlSession.selectList(namespace+"selectSalesByDay",dateSerchVo);
+	public List<Map<String, Object>> selectSalesByDay(DateSearchVO dateSearchVo) {
+		return sqlSession.selectList(namespace+"selectSalesByDay",dateSearchVo);
 	}
 	@Override
 	public List<Map<String, Object>> selectSalesByMonth(String year) {
 		return sqlSession.selectList(namespace+"selectSalesByMonth",year);
 	}
 	@Override
-	public List<Map<String, Object>> selectSalesByTerm(DateSearchVO dateSerchVo) {
-		return sqlSession.selectList(namespace+"selectSalesByMonth",dateSerchVo);
+	public List<Map<String, Object>> selectSalesByTerm(DateSearchVO dateSearchVo) {
+		return sqlSession.selectList(namespace+"selectSalesByMonth",dateSearchVo);
 	}
 
 }

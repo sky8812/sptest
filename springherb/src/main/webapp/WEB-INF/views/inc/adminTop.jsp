@@ -59,9 +59,9 @@
 				<dd><a href="<c:url value='/admin/product/productList.do' />">상품목록</a></dd>
 				<dd><a href="<c:url value='/admin/order/orderList.do' />">주문 관리</a></dd>
 				
-				<dd><a href="<c:url value='/admin/sales/salesDay.do' />">일별매출</a></dd>
-				<dd><a href="<c:url value='/admin/sales/salesMonth.do' />">월별매출</a></dd>
-				<dd><a href="<c:url value='/admin/sales/salesTerm.do' />">기간별매출</a></dd>
+				<dd><a href="<c:url value='/admin/sales/salesStats.do?type=d' />">일별매출</a></dd>
+				<dd><a href="<c:url value='/admin/sales/salesStats.do?type=m' />">월별매출</a></dd>
+				<dd><a href="<c:url value='/admin/sales/salesStats.do?type=t' />">기간별매출</a></dd>
 			</dl>
 		</nav>
 		<section id="contents">
